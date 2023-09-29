@@ -1,17 +1,14 @@
 import logging
 import os
 
-import numpy as np
-
 import cv2
 import mxnet as mx
-from torch.utils.data import Dataset
-from tqdm import tqdm
-import os
-import torch.backends.cudnn as cudnn
+import numpy as np
 from deepface.DeepFace import build_model
 from deepface.extendedmodels import Age
 from keras.preprocessing import image as KPI
+from torch.utils.data import Dataset
+from tqdm import tqdm
 
 
 class MXFaceDataset(Dataset):
@@ -19,13 +16,13 @@ class MXFaceDataset(Dataset):
     Mxnet RecordIO face dataset.
     """
 
-    def __init__(self, root_dir: str, transforms=None, **kwargs) -> None:
+    def __init__(self, root_dir: str, transforms=None, split="training") -> None:
         super(MXFaceDataset, self).__init__()
         self.transform = transforms
         self.root_dir = root_dir
-        path_imgrec = os.path.join(root_dir, "test.rec")
-        path_imgidx = os.path.join(root_dir, "test.idx")
-        path_imglst = os.path.join(root_dir, "test.lst")
+        path_imgrec = os.path.join(root_dir, f"{split}.rec")
+        path_imgidx = os.path.join(root_dir, f"{split}.idx")
+        path_imglst = os.path.join(root_dir, f"{split}.lst")
         items = [
             line.strip().split("\t") for line in open(path_imglst, "r")
         ]  # img_idx, 0, img_path
